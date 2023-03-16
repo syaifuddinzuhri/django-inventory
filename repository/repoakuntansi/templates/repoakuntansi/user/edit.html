@@ -1,0 +1,98 @@
+{% extends 'repoakuntansi/index.html' %} 
+
+{% block title %} 
+    User
+{% endblock %}
+
+{% block content %} 
+    <div class="row">
+        <div class="col-12">
+            <a href="/user" class="btn btn-sm btn-primary mb-3">Back</a>
+            <div class="card">
+                <div class="card-header">
+                    Form Edit User
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <form action="" method="POST">
+                                {% csrf_token %}
+                                <input type="hidden" name="next" value={{request.path}}>
+                                <div class="mb-3">
+                                    <label class="form-label">Nama</label>
+                                    <input type="text" class="form-control form-control" name="nama" value="{{data.nama}}" />
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Username</label>
+                                    <input type="text" class="form-control form-control" name="username" value="{{data.username}}" />
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Email</label>
+                                    <input type="email" class="form-control form-control" name="email" value="{{data.email}}" />
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">NIM</label>
+                                    <input type="number" class="form-control form-control" name="nim" value="{{data.nim}}" />
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Password</label>
+                                    <input type="password" class="form-control form-control" name="password" value=""  />
+                                </div>
+                                 <div class="mb-3">
+                                    <label class="form-label">Kode Prodi</label>
+                                    <select name="kode_prodi" class="default-select form-control form-control wide">
+                                        <option value="D4-SIB" {% if data.kode_prodi == 'D4-SIB' %}selected="selected"{% endif %}
+                                            >D4-Sistem Informasi Bisnis</option>
+                                        <option value="D4-TI" {% if data.kode_prodi == 'D4-TI' %}selected="selected"{% endif %}>D4-Teknik Informatika</option>
+                                    </select>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Kelas</label>
+                                    <select name="kelas" class="default-select form-control form-control wide">
+                                        <option value="" selected disabled>--- Pilih salah satu ---</option>
+                                        <option value="A" {% if data.kelas == 'A' %}selected="selected"{% endif %}>Tingkat Akhir Kelas-A</option>
+                                        <option value="B" {% if data.kelas == 'B' %}selected="selected"{% endif %}>Tingkat Akhir Kelas-B</option>
+                                        <option value="C" {% if data.kelas == 'C' %}selected="selected"{% endif %}>Tingkat Akhir Kelas-C</option>
+                                        <option value="D" {% if data.kelas == 'D' %}selected="selected"{% endif %}>Tingkat Akhir Kelas-D</option>
+                                        <option value="E" {% if data.kelas == 'E' %}selected="selected"{% endif %}>Tingkat Akhir Kelas-E</option>
+                                        <option value="F" {% if data.kelas == 'F' %}selected="selected"{% endif %}>Tingkat Akhir Kelas-F</option>
+                                        <option value="G" {% if data.kelas == 'G' %}selected="selected"{% endif %}>Tingkat Akhir Kelas-G</option>
+                                        <option value="H" {% if data.kelas == 'H' %}selected="selected"{% endif %}>Tingkat Akhir Kelas-H</option>
+                                        <option value="I" {% if data.kelas == 'I' %}selected="selected"{% endif %}>Tingkat Akhir Kelas-I</option>
+                                        <option value="J" {% if data.kelas == 'J' %}selected="selected"{% endif %}>Tingkat Akhir Kelas-J</option>
+                                    </select>
+                                </div>
+                                <button class="btn btn-primary btn-sm">Simpan</button>
+                            </form>
+                            
+                            {% for msg in messages %} 
+                                {% if msg.tags == 'success' %}
+                                <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+                                <script>
+                                Swal.fire({
+                                    title: "Success",
+                                    text: "{{msg}}",
+                                    icon: "success",
+                                    showConfirmButton: false,
+                                    timer: 1500,
+                                });
+                                </script>
+                                {% endif %} 
+                                {% if msg.tags == 'error' %}
+                                <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+                                <script>
+                                    Swal.fire({
+                                    title: "Error",
+                                    html: "{{msg}}",
+                                    icon: "error",
+                                    });
+                                </script>
+                                {% endif %} 
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

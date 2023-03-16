@@ -1,0 +1,80 @@
+{% extends 'repoakuntansi/index.html' %} 
+
+{% block title %} 
+    User
+{% endblock %}
+
+{% block content %} 
+    <div class="row">
+        <div class="col-12">
+            <a href="/user/create" class="btn btn-sm btn-primary mb-3">Create New User</a>
+            <div class="card">
+                <div class="card-header">
+                    List Users
+                </div>
+                <div class="card-body">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th scope="col">#</th>
+                                <th scope="col">Nama</th>
+                                <th scope="col">Email</th>
+                                <th scope="col">Username</th>
+                                <th scope="col">NIM</th>
+                                <th scope="col">Kode Prodi</th>
+                                <th scope="col">Kelas</th>
+                                <th scope="col">Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for item in data %}
+                                <tr>
+                                    <td>{{ forloop.counter }}</td>
+                                    <td>{{item.nama}}</td>
+                                    <td>{{item.email}}</td>
+                                    <td>{{item.username}}</td>
+                                    <td>{{item.nim|default_if_none:""}}</td>
+                                    <td>{{item.kode_prodi|default_if_none:""}}</td>
+                                    <td>{{item.kelas|default_if_none:""}}</td>
+                                    <td>
+                                        <div class="btn-group" role="group" aria-label="Basic example">
+                                            <a href={% url 'user-edit' id=item.id %}  class="btn btn-info text-white btn-sm">Edit</a>
+                                            <a href={% url 'user-delete' id=item.id %}  class="btn btn-danger btn-sm">Delete</a>
+                                        </div>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                                
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    {% for msg in messages %} 
+        {% if msg.tags == 'success' %}
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+        <script>
+        Swal.fire({
+            title: "Success",
+            text: "{{msg}}",
+            icon: "success",
+            showConfirmButton: false,
+            timer: 1500,
+        });
+        </script>
+        {% endif %} 
+        {% if msg.tags == 'error' %}
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+        <script>
+            Swal.fire({
+            title: "Error",
+            text: "{{msg}}",
+            icon: "error",
+            });
+        </script>
+        {% endif %} 
+    {% endfor %}
+{% endblock %}

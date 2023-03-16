@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+  {% load static %}
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta charset="utf-8" />
+    <meta name="keywords" content="" />
+    <meta name="author" content="" />
+    <meta name="robots" content="" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <meta
+      name="description"
+      content="Tixia - Crypto Codeigniter Admin Dashboard"
+    />
+    <meta
+      property="og:title"
+      content="Tixia - Crypto Codeigniter Admin Dashboard"
+    />
+    <meta
+      property="og:description"
+      content="Tixia - Crypto Codeigniter Admin Dashboard"
+    />
+    <meta property="og:image" content="../social-image.png" />
+    <meta name="format-detection" content="telephone=no" />
+    <title>Repository - Akuntansi</title>
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="16x16"
+      href="{% static 'repoakuntansi/public/assets/images/folder.png' %}"
+    />
+    <link
+      href="{% static 'repoakuntansi/public/assets/vendor/bootstrap-select/dist/css/bootstrap-select.min.css' %}"
+      rel="stylesheet"
+    />
+    <link
+      href="{% static 'repoakuntansi/public/assets/css/style.css' %}"
+      rel="stylesheet"
+    />
+  </head>
+
+  <body class="vh-100">
+    <div class="authincation h-100">
+      <div class="container h-100">
+        <div class="row justify-content-center h-100 align-items-center">
+          <div class="col-md-6">
+            <div class="authincation-content">
+              <div class="row no-gutters">
+                <div class="col-xl-12">
+                  <div class="auth-form">
+                    <div class="text-center mb-3">
+                      <img
+                        src="{% static 'repoakuntansi/public/assets/images/folder.png' %}"
+                        alt=""
+                        width="40%"
+                      />
+                    </div>
+                    <h4 class="text-center mb-4">Sign in your account</h4>
+                    <form action="login-submit" method="POST">
+                      {% csrf_token %}
+                      <div class="form-group">
+                        <label class="mb-1"><strong>Username</strong></label>
+                        <input
+                          type="number"
+                          name="username"
+                          class="form-control"
+                          placeholder="Enter username"
+                        />
+                      </div>
+                      <div class="form-group">
+                        <label class="mb-1"><strong>Password</strong></label>
+                        <input
+                          type="password"
+                          class="form-control"
+                          name="password"
+                          placeholder="Enter password"
+                        />
+                      </div>
+
+                      <div class="text-center">
+                        <button type="submit" class="btn btn-primary btn-block">
+                          Sign Me In
+                        </button>
+                      </div>
+                    </form>
+
+                    {% for msg in messages %} 
+                      {% if msg.tags == 'success' %}
+                      <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+                      <script>
+                        Swal.fire({
+                          title: "Success",
+                          text: "{{msg}}",
+                          icon: "success",
+                          showConfirmButton: false,
+                          timer: 1500,
+                        });
+                      </script>
+                      {% endif %} 
+                      {% if msg.tags == 'error' %}
+                        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+                        <script>
+                          Swal.fire({
+                            title: "Error",
+                            text: "{{msg}}",
+                            icon: "error",
+                          });
+                        </script>
+                      {% endif %} 
+                    {% endfor %}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script src="{% static 'repoakuntansi/public/assets/vendor/global/global.min.js' %}"></script>
+    <script src="{% static 'repoakuntansi/public/assets/vendor/bootstrap-select/dist/js/bootstrap-select.min.js' %}"></script>
+    <script src="{% static 'repoakuntansi/public/assets/js/deznav-init.js' %}"></script>
+    <script src="{% static 'repoakuntansi/public/assets/js/deznav-init.js' %}"></script>
+  </body>
+</html>

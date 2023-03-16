@@ -1,0 +1,96 @@
+{% extends 'repoakuntansi/index.html' %} 
+
+{% block title %} 
+    User
+{% endblock %}
+
+{% block content %} 
+    <div class="row">
+        <div class="col-12">
+            <a href="/user" class="btn btn-sm btn-primary mb-3">Back</a>
+            <div class="card">
+                <div class="card-header">
+                    Form Create New User
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <form action="/user/create" method="POST">
+                                {% csrf_token %}
+                                <div class="mb-3">
+                                    <label class="form-label">Nama</label>
+                                    <input type="text" class="form-control form-control" name="nama" />
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Username</label>
+                                    <input type="text" class="form-control form-control" name="username" />
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Email</label>
+                                    <input type="email" class="form-control form-control" name="email" />
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">NIM</label>
+                                    <input type="number" class="form-control form-control" name="nim"  />
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Password</label>
+                                    <input type="password" class="form-control form-control" name="password"  />
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Kode Prodi</label>
+                                    <select name="kode_prodi" class="default-select form-control form-control wide">
+                                        <option value="D4-SIB" selected>D4-Sistem Informasi Bisnis</option>
+                                        <option value="D4-TI" >D4-Teknik Informatika</option>
+                                    </select>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Kelas</label>
+                                    <select name="kelas" class="default-select form-control form-control wide">
+                                        <option value="" selected disabled>--- Pilih salah satu ---</option>
+                                        <option value="A" >Tingkat Akhir Kelas-A</option>
+                                        <option value="B" >Tingkat Akhir Kelas-B</option>
+                                        <option value="C" >Tingkat Akhir Kelas-C</option>
+                                        <option value="D" >Tingkat Akhir Kelas-D</option>
+                                        <option value="E" >Tingkat Akhir Kelas-E</option>
+                                        <option value="F" >Tingkat Akhir Kelas-F</option>
+                                        <option value="G" >Tingkat Akhir Kelas-G</option>
+                                        <option value="H" >Tingkat Akhir Kelas-H</option>
+                                        <option value="I" >Tingkat Akhir Kelas-I</option>
+                                        <option value="J" >Tingkat Akhir Kelas-J</option>
+                                    </select>
+                                </div>
+                                <button class="btn btn-primary btn-sm">Simpan</button>
+                            </form>
+                            
+                            {% for msg in messages %} 
+                                {% if msg.tags == 'success' %}
+                                <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+                                <script>
+                                Swal.fire({
+                                    title: "Success",
+                                    text: "{{msg}}",
+                                    icon: "success",
+                                    showConfirmButton: false,
+                                    timer: 1500,
+                                });
+                                </script>
+                                {% endif %} 
+                                {% if msg.tags == 'error' %}
+                                <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+                                <script>
+                                    Swal.fire({
+                                    title: "Error",
+                                    html: "{{msg}}",
+                                    icon: "error",
+                                    });
+                                </script>
+                                {% endif %} 
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
