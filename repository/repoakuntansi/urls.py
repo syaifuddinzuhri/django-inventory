@@ -12,12 +12,17 @@ urlpatterns = [
     path('tugas', views.tugas, name='tugas'),
     path('profile', views.profile, name='profile'),
     path('jurnal', views.jurnal, name='jurnal'),
-    path('pembimbing', views.pembimbing, name='pembimbing'),
 
     path('user', views.userList, name='user-list'),
     path('user/create', views.userCreate, name='user-create'),
     path('user/<id>/edit', views.userEdit, name='user-edit'),
     path('user/<id>/delete', views.userDelete, name='user-delete'),
+
+    path('pembimbing', views.pembimbingList, name='pembimbing-list'),
+    path('pembimbing/create', views.pembimbingCreate, name='pembimbing-create'),
+    path('pembimbing/<id>/edit', views.pembimbingEdit, name='pembimbing-edit'),
+    path('pembimbing/<id>/delete', views.pembimbingDelete,
+         name='pembimbing-delete'),
 
     path('admins', views.adminList, name='admin-list'),
     path('admins/create', views.adminCreate, name='admin-create'),

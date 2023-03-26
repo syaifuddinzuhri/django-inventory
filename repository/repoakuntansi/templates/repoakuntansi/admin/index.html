@@ -31,10 +31,13 @@
                                     <td>{{item.email}}</td>
                                     <td>{{item.username}}</td>
                                     <td>
+                                        {% if user.username != item.username %}
                                         <div class="btn-group" role="group" aria-label="Basic example">
                                             <a href={% url 'admin-edit' id=item.id %}  class="btn btn-info text-white btn-sm">Edit</a>
                                             <a href={% url 'admin-delete' id=item.id %}  class="btn btn-danger btn-sm">Delete</a>
                                         </div>
+                                        {% endif %}
+
                                     </td>
                                 </tr>
                             {% endfor %}

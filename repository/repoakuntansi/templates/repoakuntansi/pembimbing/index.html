@@ -1,16 +1,16 @@
 {% extends 'repoakuntansi/index.html' %} 
 
 {% block title %} 
-    Super Admin
+    Pembimbing
 {% endblock %}
 
 {% block content %} 
     <div class="row">
         <div class="col-12">
-            <a href="/super-admin/create" class="btn btn-sm btn-primary mb-3">Create New Super Admin</a>
+            <a href="/pembimbing/create" class="btn btn-sm btn-primary mb-3">Create New Pembimbing</a>
             <div class="card">
                 <div class="card-header">
-                    List Super Admin
+                    List Pembimbing
                 </div>
                 <div class="card-body">
                     <table class="table">
@@ -20,6 +20,7 @@
                                 <th scope="col">Nama</th>
                                 <th scope="col">Email</th>
                                 <th scope="col">Username</th>
+                                <th scope="col">NIP</th>
                                 <th scope="col">Aksi</th>
                             </tr>
                         </thead>
@@ -30,13 +31,12 @@
                                     <td>{{item.nama}}</td>
                                     <td>{{item.email}}</td>
                                     <td>{{item.username}}</td>
+                                    <td>{{item.nip|default_if_none:""}}</td>
                                     <td>
-                                        {% if user.username != item.username %}
                                         <div class="btn-group" role="group" aria-label="Basic example">
-                                            <a href={% url 'super-admin-edit' id=item.id %}  class="btn btn-info text-white btn-sm">Edit</a>
-                                            <a href={% url 'super-admin-delete' id=item.id %}  class="btn btn-danger btn-sm">Delete</a>
+                                            <a href={% url 'pembimbing-edit' id=item.id %}  class="btn btn-info text-white btn-sm">Edit</a>
+                                            <a href={% url 'pembimbing-delete' id=item.id %}  class="btn btn-danger btn-sm">Delete</a>
                                         </div>
-                                        {% endif %}
                                     </td>
                                 </tr>
                             {% endfor %}

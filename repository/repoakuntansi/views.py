@@ -100,26 +100,119 @@ def profile(request):
             kode_prodi = request.POST.get('kode_prodi')
             email = request.POST.get('email')
             username = request.POST.get('username')
+            old_password = request.POST.get('old_password')
+            new_password = request.POST.get('new_password')
+            new_password_confirmation = request.POST.get(
+                'new_password_confirmation')
             user = get_object_or_404(User, username=request.user)
             user.email = email
             user.username = username
             user.nama = nama
+            if old_password:
+                if not user.check_password(old_password):
+                    messages.error(request, 'Password lama salah')
+                    return redirect('/profile')
+                if new_password:
+                    if not new_password_confirmation:
+                        messages.error(
+                            request, 'Konfirmasi password baru harus diisi')
+                        return redirect('/profile')
+                    if new_password != new_password_confirmation:
+                        messages.error(
+                            request, 'Konfirmasi password baru tidak sama')
+                        return redirect('/profile')
+                    user.password = make_password(new_password)
             if user.tipe == 'USER':
                 user.nim = nim
                 user.kode_prodi = kode_prodi
                 user.kelas = kelas
             user.save()
             messages.success(request, 'Berhasil menyimpan data')
-            return redirect('profile')
+            return redirect('/login')
         except:
             messages.error(request, 'Internal Server Error')
-            return redirect('profile')
+            return redirect('/profile')
     context = {}
     context["data"] = get_object_or_404(User, username=request.user)
     return render(request, 'repoakuntansi/profile.html', context)
 
 
+# PEMBIMBING VIEWS
+@login_required(login_url='/login')
+def pembimbingList(request):
+    users = User.objects.filter(tipe='PEMBIMBING').values()
+    context = {}
+    context["data"] = users
+    return render(request, 'repoakuntansi/pembimbing/index.html', context)
+
+
+@login_required(login_url='/login')
+def pembimbingCreate(request):
+    if request.method == 'POST':
+        try:
+            post = request.POST.copy()
+            post['password'] = make_password(request.POST.get('password'))
+            post['tipe'] = 'PEMBIMBING'
+            form = UserForm(post or None)
+            if form.is_valid():
+                form.save()
+                messages.success(request, 'Berhasil menyimpan data')
+            else:
+                msg = []
+                for field in form:
+                    for error in field.errors:
+                        msg.append(error)
+                messages.error(request, msg)
+                return redirect('/pembimbing/create')
+            return redirect('/pembimbing')
+        except:
+            messages.error(request, 'Internal Server Error')
+            return redirect('/pembimbing/create')
+    return render(request, 'repoakuntansi/pembimbing/create.html')
+
+
+@login_required(login_url='/login')
+def pembimbingEdit(request, id):
+    if request.method == 'POST':
+        try:
+            nama = request.POST.get('nama')
+            nip = request.POST.get('nip')
+            email = request.POST.get('email')
+            username = request.POST.get('username')
+            password = request.POST.get('password')
+            user = get_object_or_404(User, id=id)
+            if len(password) > 0:
+                password = make_password(request.POST.get('password'))
+                user.password = password
+            user.email = email
+            user.username = username
+            user.nama = nama
+            user.nip = nip
+            user.save()
+            messages.success(request, 'Berhasil menyimpan data')
+            return redirect('/pembimbing')
+        except:
+            next = request.POST.get('next')
+            messages.error(request, 'Internal Server Error')
+            return HttpResponseRedirect(next)
+    context = {}
+    context["data"] = get_object_or_404(User, id=id)
+    return render(request, 'repoakuntansi/pembimbing/edit.html', context)
+
+
+@login_required(login_url='/login')
+def pembimbingDelete(request, id):
+    try:
+        obj = User.objects.get(id=id)
+        obj.delete()
+        messages.success(request, 'Berhasil menghapus data')
+    except:
+        messages.error(request, 'Gagal menghapus data')
+    return redirect('/pembimbing')
+
 # USER VIEWS
+
+
 @login_required(login_url='/login')
 def userList(request):
     users = User.objects.filter(tipe='USER').values()
@@ -204,6 +297,7 @@ def adminList(request):
     users = User.objects.filter(tipe='ADMIN').values()
     context = {}
     context["data"] = users
+    context["user"] = get_object_or_404(User, username=request.user)
     return render(request, 'repoakuntansi/admin/index.html', context)
 
 
@@ -277,6 +371,7 @@ def superAdminList(request):
     users = User.objects.filter(tipe='SUPER_ADMIN').values()
     context = {}
     context["data"] = users
+    context["user"] = get_object_or_404(User, username=request.user)
     return render(request, 'repoakuntansi/super-admin/index.html', context)
 
 
@@ -355,10 +450,3 @@ def tugas(request):
 @login_required(login_url='/login')
 def jurnal(request):
     return render(request, 'repoakuntansi/jurnal.html')
-
-# PEMBIMBING VIEWS
-
-
-@login_required(login_url='/login')
-def pembimbing(request):
-    return render(request, 'repoakuntansi/pembimbing.html')

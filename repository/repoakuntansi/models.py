@@ -37,11 +37,13 @@ class User(AbstractUser):
     SUPER_ADMIN = "SUPER_ADMIN"
     ADMIN = "ADMIN"
     USER = "USER"
+    PEMBIMBING = "PEMBIMBING"
 
     TIPE_CHOICES = (
         (SUPER_ADMIN, 'Super Admin'),
         (ADMIN, 'Admin'),
         (USER, 'User'),
+        (PEMBIMBING, 'Pembimbing'),
     )
 
     nama = models.CharField(max_length=255, blank=True)
@@ -49,6 +51,7 @@ class User(AbstractUser):
     nim = models.CharField(max_length=12, unique=True, null=True, blank=True)
     kode_prodi = models.CharField(max_length=100, null=True, blank=True)
     kelas = models.CharField(max_length=100, null=True, blank=True)
+    nip = models.CharField(max_length=100, null=True, blank=True)
     tipe = models.CharField(
         max_length=255, choices=TIPE_CHOICES, default=USER, blank=True)
 
