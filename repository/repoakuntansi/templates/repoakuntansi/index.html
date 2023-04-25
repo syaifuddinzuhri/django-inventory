@@ -110,26 +110,30 @@
                             <span class="nav-text">Dashboard</span>
                         </a>
                     </li>
+                    {% if user.tipe == 'SUPER_ADMIN' or user.tipe == 'ADMIN'  %}
                     <li><a class="has-arrow ai-icon" href="javascript:void()" >
-                            <i class="flaticon-381-user"></i>
-                            <span class="nav-text">User</span>
-                        </a>
-                        <ul >
-                            <li><a href="/super-admin">Super Admin</a></li>
-                            <li><a href="/admins">Admin</a></li>
-                            <li><a href="/user">User</a></li>
-                            <li><a href="/pembimbing">Pembimbing</a></li>
+                        <i class="flaticon-381-user"></i>
+                        <span class="nav-text">User</span>
+                    </a>
+                    <ul >
+                        <li><a href="/super-admin">Super Admin</a></li>
+                        <li><a href="/admins">Admin</a></li>
+                        <li><a href="/user">User</a></li>
+                        <li><a href="/pembimbing">Pembimbing</a></li>
                         </ul>
                     </li>
+                    {% endif %}
+                    {% comment %} {% if user.tipe == 'USER' %} {% endcomment %}
                     <li><a class="has-arrow ai-icon" href="javascript:void()" >
                             <i class="flaticon-381-notepad"></i>
                             <span class="nav-text">Upload </span>
                         </a>
                         <ul >
-                            <li><a href="tugas">Tugas Akhir</a></li>
-                            <li><a href="jurnal">Jurnal</a></li>
+                            <li><a href="/tugas-akhir">Tugas Akhir</a></li>
+                            <li><a href="/jurnal">Jurnal</a></li>
                         </ul>
                     </li>
+                    {% comment %} {% endif %} {% endcomment %}
                     {% comment %} <li><a class="has-arrow ai-icon" href="javascript:void()" >
                             <i class="flaticon-381-network"></i>
                             <span class="nav-text">Table</span>

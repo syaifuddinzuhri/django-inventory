@@ -45,7 +45,7 @@
                 placeholder="Enter new password Confirmation"
             />
         </div>
-        {% if data.tipe == 'USER' %}
+        {% if user.tipe == 'USER' %}
             <div class="mb-3">
                 <label class="form-label">NIM</label>
                 <input type="number" class="form-control form-control" name="nim" value="{{data.nim}}" />

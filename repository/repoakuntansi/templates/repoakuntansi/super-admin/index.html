@@ -7,7 +7,9 @@
 {% block content %} 
     <div class="row">
         <div class="col-12">
+            {% if user.tipe == 'SUPER_ADMIN' %}
             <a href="/super-admin/create" class="btn btn-sm btn-primary mb-3">Create New Super Admin</a>
+            {% endif %}
             <div class="card">
                 <div class="card-header">
                     List Super Admin
@@ -32,10 +34,12 @@
                                     <td>{{item.username}}</td>
                                     <td>
                                         {% if user.username != item.username %}
+                                        {% if user.tipe == 'SUPER_ADMIN' %}
                                         <div class="btn-group" role="group" aria-label="Basic example">
                                             <a href={% url 'super-admin-edit' id=item.id %}  class="btn btn-info text-white btn-sm">Edit</a>
                                             <a href={% url 'super-admin-delete' id=item.id %}  class="btn btn-danger btn-sm">Delete</a>
                                         </div>
+                                        {% endif %}
                                         {% endif %}
                                     </td>
                                 </tr>

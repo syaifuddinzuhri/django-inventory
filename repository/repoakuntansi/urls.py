@@ -9,9 +9,7 @@ urlpatterns = [
     path('logout', views.logoutPage, name='logout'),
     path('login', views.loginPage, name='login'),
     path('login-submit', views.submitLogin, name='login-submit'),
-    path('tugas', views.tugas, name='tugas'),
     path('profile', views.profile, name='profile'),
-    path('jurnal', views.jurnal, name='jurnal'),
 
     path('user', views.userList, name='user-list'),
     path('user/create', views.userCreate, name='user-create'),
@@ -34,4 +32,17 @@ urlpatterns = [
     path('super-admin/<id>/edit', views.superAdminEdit, name='super-admin-edit'),
     path('super-admin/<id>/delete', views.superAdminDelete,
          name='super-admin-delete'),
+
+    path('tugas-akhir', views.tugasAkhirList, name='tugas-akhir-list'),
+    path('tugas-akhir/create', views.tugasAkhirCreate, name='tugas-akhir-create'),
+    path('tugas-akhir/<id>/edit', views.tugasAkhirEdit, name='tugas-akhir-edit'),
+    path('tugas-akhir/<id>/delete', views.tugasAkhirDelete,
+         name='tugas-akhir-delete'),
+
+    path('jurnal/export', views.exportJurnal, name='jurnal-export'),
+    path('jurnal', views.jurnalList, name='jurnal-list'),
+    path('jurnal/create', views.jurnalCreate, name='jurnal-create'),
+    path('jurnal/<id>/edit', views.jurnalEdit, name='jurnal-edit'),
+    path('jurnal/<id>/delete', views.jurnalDelete,
+         name='jurnal-delete'),
 ]

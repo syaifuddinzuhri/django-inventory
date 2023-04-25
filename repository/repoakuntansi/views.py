@@ -1,13 +1,16 @@
 
+import datetime
 from MySQLdb import IntegrityError
 from django.shortcuts import render
 from django.http import HttpResponse, HttpResponsePermanentRedirect
 from django.core.files.storage import FileSystemStorage
 from django.contrib.auth import login, authenticate, logout
 from repoakuntansi.models import User
+from repoakuntansi.models import TugasAkhir
 from repoakuntansi.models import Jurnal
 from .forms import UserForm
 from .forms import JurnalForm
+from .forms import TugasAkhirForm
 from repoakuntansi.functions import handle_uploaded_file  # functions.py
 from django.shortcuts import redirect
 from django.contrib.auth.decorators import login_required
@@ -16,6 +19,7 @@ from django.shortcuts import (get_object_or_404,
                               render,
                               HttpResponseRedirect)
 from django.contrib.auth.hashers import make_password
+import xlwt
 
 
 @login_required(login_url='/login')
@@ -54,6 +58,7 @@ def dashboard(request):
         'form': form,
         'books': books,
     }
+    konteks["user"] = get_object_or_404(User, username=request.user)
     return render(request, 'repoakuntansi/dashboard.html', konteks)
 
 
@@ -133,6 +138,7 @@ def profile(request):
             messages.error(request, 'Internal Server Error')
             return redirect('/profile')
     context = {}
+    context["user"] = get_object_or_404(User, username=request.user)
     context["data"] = get_object_or_404(User, username=request.user)
     return render(request, 'repoakuntansi/profile.html', context)
 
@@ -143,6 +149,7 @@ def pembimbingList(request):
     users = User.objects.filter(tipe='PEMBIMBING').values()
     context = {}
     context["data"] = users
+    context["user"] = get_object_or_404(User, username=request.user)
     return render(request, 'repoakuntansi/pembimbing/index.html', context)
 
 
@@ -168,7 +175,9 @@ def pembimbingCreate(request):
         except:
             messages.error(request, 'Internal Server Error')
             return redirect('/pembimbing/create')
-    return render(request, 'repoakuntansi/pembimbing/create.html')
+    context = {}
+    context["user"] = get_object_or_404(User, username=request.user)
+    return render(request, 'repoakuntansi/pembimbing/create.html', context)
 
 
 @login_required(login_url='/login')
@@ -194,8 +203,9 @@ def pembimbingEdit(request, id):
         except:
             next = request.POST.get('next')
             messages.error(request, 'Internal Server Error')
-            return HttpResponseRedirect(next)
+            return redirect(request.path)
     context = {}
+    context["user"] = get_object_or_404(User, username=request.user)
     context["data"] = get_object_or_404(User, id=id)
     return render(request, 'repoakuntansi/pembimbing/edit.html', context)
 
@@ -218,6 +228,7 @@ def userList(request):
     users = User.objects.filter(tipe='USER').values()
     context = {}
     context["data"] = users
+    context["user"] = get_object_or_404(User, username=request.user)
     return render(request, 'repoakuntansi/user/index.html', context)
 
 
@@ -243,7 +254,9 @@ def userCreate(request):
         except:
             messages.error(request, 'Internal Server Error')
             return redirect('/user/create')
-    return render(request, 'repoakuntansi/user/create.html')
+    context = {}
+    context["user"] = get_object_or_404(User, username=request.user)
+    return render(request, 'repoakuntansi/user/create.html', context)
 
 
 @login_required(login_url='/login')
@@ -273,8 +286,9 @@ def userEdit(request, id):
         except:
             next = request.POST.get('next')
             messages.error(request, 'Internal Server Error')
-            return HttpResponseRedirect(next)
+            return redirect(request.path)
     context = {}
+    context["user"] = get_object_or_404(User, username=request.user)
     context["data"] = get_object_or_404(User, id=id)
     return render(request, 'repoakuntansi/user/edit.html', context)
 
@@ -323,7 +337,9 @@ def adminCreate(request):
         except:
             messages.error(request, 'Internal Server Error')
             return redirect('/admins/create')
-    return render(request, 'repoakuntansi/admin/create.html')
+    context = {}
+    context["user"] = get_object_or_404(User, username=request.user)
+    return render(request, 'repoakuntansi/admin/create.html', context)
 
 
 @login_required(login_url='/login')
@@ -347,8 +363,9 @@ def adminEdit(request, id):
         except:
             next = request.POST.get('next')
             messages.error(request, 'Internal Server Error')
-            return HttpResponseRedirect(next)
+            return redirect(request.path)
     context = {}
+    context["user"] = get_object_or_404(User, username=request.user)
     context["data"] = get_object_or_404(User, id=id)
     return render(request, 'repoakuntansi/admin/edit.html', context)
 
@@ -397,7 +414,9 @@ def superAdminCreate(request):
         except:
             messages.error(request, 'Internal Server Error')
             return redirect('/super-admin/create')
-    return render(request, 'repoakuntansi/super-admin/create.html')
+    context = {}
+    context["user"] = get_object_or_404(User, username=request.user)
+    return render(request, 'repoakuntansi/super-admin/create.html', context)
 
 
 @login_required(login_url='/login')
@@ -421,9 +440,10 @@ def superAdminEdit(request, id):
         except:
             next = request.POST.get('next')
             messages.error(request, 'Internal Server Error')
-            return HttpResponseRedirect(next)
+            return redirect(request.path)
     context = {}
     context["data"] = get_object_or_404(User, id=id)
+    context["user"] = get_object_or_404(User, username=request.user)
     return render(request, 'repoakuntansi/super-admin/edit.html', context)
 
 
@@ -441,12 +461,198 @@ def superAdminDelete(request, id):
 
 
 @login_required(login_url='/login')
-def tugas(request):
-    return render(request, 'repoakuntansi/tugas.html')
+def tugasAkhirList(request):
+    tugas = TugasAkhir.objects.all()
+    context = {}
+    context["user"] = get_object_or_404(User, username=request.user)
+    context["data"] = tugas
+    return render(request, 'repoakuntansi/tugas-akhir/index.html', context)
+
+
+@login_required(login_url='/login')
+def tugasAkhirCreate(request):
+    if request.method == 'POST':
+        try:
+            user = get_object_or_404(User, username=request.user)
+            post = request.POST.copy()
+            post['user'] = user.id
+            post['status'] = 'Menunggu Konfirmasi'
+            form = TugasAkhirForm(post or None, request.FILES)
+            if form.is_valid():
+                form.save()
+                messages.success(request, 'Berhasil menyimpan data')
+            else:
+                msg = []
+                for field in form:
+                    for error in field.errors:
+                        msg.append(error)
+                messages.error(request, msg)
+                return redirect('/tugas-akhir/create')
+            return redirect('/tugas-akhir')
+        except:
+            messages.error(request, 'Internal Server Error')
+            return redirect('/tugas-akhir/create')
+    pembimbing = User.objects.filter(tipe='PEMBIMBING').values()
+    context = {}
+    context["user"] = get_object_or_404(User, username=request.user)
+    context["data"] = pembimbing
+    return render(request, 'repoakuntansi/tugas-akhir/create.html', context)
+
+
+@login_required(login_url='/login')
+def tugasAkhirEdit(request, id):
+    if request.method == 'POST':
+        try:
+            tugasAkhir = TugasAkhir.objects.get(id=id)
+            post = request.POST.copy()
+            post['user'] = tugasAkhir.user_id
+            post['status'] = tugasAkhir.status
+            form = TugasAkhirForm(post,
+                                  request.FILES, instance=tugasAkhir)
+            if form.is_valid():
+                form.save()
+                messages.success(request, 'Berhasil menyimpan data')
+            else:
+                msg = []
+                for field in form:
+                    for error in field.errors:
+                        msg.append(error)
+                messages.error(request, msg)
+                return redirect(request.path)
+            messages.success(request, 'Berhasil menyimpan data')
+            return redirect('/tugas-akhir')
+        except:
+            next = request.POST.get('next')
+            messages.error(request, 'Internal Server Error')
+            return redirect(request.path)
+    context = {}
+    pembimbing = User.objects.filter(tipe='PEMBIMBING').values()
+    context["user"] = get_object_or_404(User, username=request.user)
+    context["data"] = get_object_or_404(TugasAkhir, id=id)
+    context["pembimbing"] = pembimbing
+    return render(request, 'repoakuntansi/tugas-akhir/edit.html', context)
+
+
+@login_required(login_url='/login')
+def tugasAkhirDelete(request, id):
+    try:
+        obj = TugasAkhir.objects.get(id=id)
+        obj.delete()
+        messages.success(request, 'Berhasil menghapus data')
+    except:
+        messages.error(request, 'Gagal menghapus data')
+    return redirect('/tugas-akhir')
 
 # JURNAL VIEWS
 
 
 @login_required(login_url='/login')
-def jurnal(request):
-    return render(request, 'repoakuntansi/jurnal.html')
+def jurnalList(request):
+    tugas = Jurnal.objects.all()
+    context = {}
+    context["user"] = get_object_or_404(User, username=request.user)
+    context["data"] = tugas
+    return render(request, 'repoakuntansi/jurnal/index.html', context)
+
+
+@login_required(login_url='/login')
+def jurnalCreate(request):
+    if request.method == 'POST':
+        try:
+            user = get_object_or_404(User, username=request.user)
+            post = request.POST.copy()
+            post['user'] = user.id
+            post['status'] = 'Menunggu Konfirmasi'
+            form = JurnalForm(post or None, request.FILES)
+            if form.is_valid():
+                form.save()
+                messages.success(request, 'Berhasil menyimpan data')
+            else:
+                msg = []
+                for field in form:
+                    for error in field.errors:
+                        msg.append(error)
+                messages.error(request, msg)
+                return redirect('/jurnal/create')
+            return redirect('/jurnal')
+        except:
+            messages.error(request, 'Internal Server Error')
+            return redirect('/jurnal/create')
+    pembimbing = User.objects.filter(tipe='PEMBIMBING').values()
+    context = {}
+    context["user"] = get_object_or_404(User, username=request.user)
+    context["data"] = pembimbing
+    return render(request, 'repoakuntansi/jurnal/create.html', context)
+
+
+@login_required(login_url='/login')
+def jurnalEdit(request, id):
+    if request.method == 'POST':
+        try:
+            jurnal = Jurnal.objects.get(id=id)
+            post = request.POST.copy()
+            post['user'] = jurnal.user_id
+            post['status'] = jurnal.status
+            form = JurnalForm(post,
+                              request.FILES, instance=jurnal)
+            if form.is_valid():
+                form.save()
+                messages.success(request, 'Berhasil menyimpan data')
+            else:
+                msg = []
+                for field in form:
+                    for error in field.errors:
+                        msg.append(error)
+                messages.error(request, msg)
+                return redirect(request.path)
+            messages.success(request, 'Berhasil menyimpan data')
+            return redirect('/jurnal')
+        except:
+            next = request.POST.get('next')
+            messages.error(request, 'Internal Server Error')
+            return redirect(request.path)
+    context = {}
+    pembimbing = User.objects.filter(tipe='PEMBIMBING').values()
+    context["user"] = get_object_or_404(User, username=request.user)
+    context["data"] = get_object_or_404(Jurnal, id=id)
+    context["pembimbing"] = pembimbing
+    return render(request, 'repoakuntansi/jurnal/edit.html', context)
+
+
+@login_required(login_url='/login')
+def jurnalDelete(request, id):
+    try:
+        obj = Jurnal.objects.get(id=id)
+        obj.delete()
+        messages.success(request, 'Berhasil menghapus data')
+    except:
+        messages.error(request, 'Gagal menghapus data')
+    return redirect('/jurnal')
+
+
+@login_required(login_url='/login')
+def exportJurnal(request):
+    response = HttpResponse(content_type='application/ms-excel')
+    response['Content-Disposition'] = 'attachment; filename=Jurnal' + \
+        str(datetime.datetime.now()) + '.xls'
+    wb = xlwt.Workbook(encoding='utf-8')
+    ws = wb.add_sheet('Jurnal')
+    row_num = 0
+    font_style = xlwt.XFStyle()
+    font_style.font_bold = True
+    columns = ['Judul', 'Deskripsi', 'File']
+
+    for col_num in range(len(columns)):
+        ws.write(row_num, col_num, columns[col_num], font_style)
+
+    font_style = xlwt.XFStyle()
+
+    rows = Jurnal.objects.all().values_list('title', 'deskripsi', 'file')
+
+    for row in rows:
+        row_num += 1
+        for col_num in range(len(columns)):
+            ws.write(row_num, col_num, str(row[col_num]), font_style)
+
+    wb.save(response)
+    return response

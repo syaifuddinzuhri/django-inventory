@@ -1,28 +1,29 @@
 {% extends 'repoakuntansi/index.html' %} 
 
 {% block title %} 
-    Pembimbing
+    Jurnal
 {% endblock %}
 
 {% block content %} 
     <div class="row">
         <div class="col-12">
-            {% if user.tipe == 'SUPER_ADMIN' %}
-            <a href="/pembimbing/create" class="btn btn-sm btn-primary mb-3">Create New Pembimbing</a>
+            <a href="/jurnal/create" class="btn btn-sm btn-primary mb-3">Create New Jurnal</a>
+            {% if user.tipe == 'SUPER_ADMIN' or user.tipe == 'ADMIN'  %}
+            <a href="/jurnal/export" class="btn btn-sm btn-primary mb-3">Export</a>
             {% endif %}
             <div class="card">
                 <div class="card-header">
-                    List Pembimbing
+                    List Jurnal
                 </div>
                 <div class="card-body">
                     <table class="table">
                         <thead>
                             <tr>
                                 <th scope="col">#</th>
-                                <th scope="col">Nama</th>
-                                <th scope="col">Email</th>
-                                <th scope="col">Username</th>
-                                <th scope="col">NIP</th>
+                                <th scope="col">Nama Mahasiswa</th>
+                                <th scope="col">Judul</th>
+                                {% comment %} <th scope="col">Status</th> {% endcomment %}
+                                <th scope="col">Draft</th>
                                 <th scope="col">Aksi</th>
                             </tr>
                         </thead>
@@ -30,17 +31,15 @@
                             {% for item in data %}
                                 <tr>
                                     <td>{{ forloop.counter }}</td>
-                                    <td>{{item.nama}}</td>
-                                    <td>{{item.email}}</td>
-                                    <td>{{item.username}}</td>
-                                    <td>{{item.nip|default_if_none:""}}</td>
+                                    <td>{{item.user.nama}}</td>
+                                    <td>{{item.title}}</td>
+                                    {% comment %} <td>{{item.status}}</td> {% endcomment %}
+                                    <td>{{item.file}}</td>
                                     <td>
-                                        {% if user.tipe == 'SUPER_ADMIN' %}
                                         <div class="btn-group" role="group" aria-label="Basic example">
-                                            <a href={% url 'pembimbing-edit' id=item.id %}  class="btn btn-info text-white btn-sm">Edit</a>
-                                            <a href={% url 'pembimbing-delete' id=item.id %}  class="btn btn-danger btn-sm">Delete</a>
+                                            <a href={% url 'jurnal-edit' id=item.id %}  class="btn btn-info text-white btn-sm">Edit</a>
+                                            <a href={% url 'jurnal-delete' id=item.id %}  class="btn btn-danger btn-sm">Delete</a>
                                         </div>
-                                        {% endif %}
                                     </td>
                                 </tr>
                             {% endfor %}

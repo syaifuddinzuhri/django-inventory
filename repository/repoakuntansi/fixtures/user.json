@@ -1,0 +1,13 @@
+[
+    {
+        "model": "repoakuntansi.User",
+        "pk": 1,
+        "fields": {
+            "password": "pbkdf2_sha256$390000$XObTJ6yPbBZJVOF3412DTG$abr3VwLkpO/MFXr5kdzrGmU+FiV469mWYNTwpTJYxuU=",
+            "username": "superadmin",
+            "email": "superadmin@gmail.com",
+            "nama": "Super Admin",
+            "tipe": "SUPER_ADMIN"
+        }
+    }
+]

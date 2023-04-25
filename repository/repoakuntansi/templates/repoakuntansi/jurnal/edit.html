@@ -1,0 +1,66 @@
+{% extends 'repoakuntansi/index.html' %} 
+
+{% block title %} 
+    Jurnal
+{% endblock %}
+
+{% block content %} 
+    <div class="row">
+        <div class="col-12">
+            <a href="/jurnal" class="btn btn-sm btn-primary mb-3">Back</a>
+            <div class="card">
+                <div class="card-header">
+                    Form Create New Jurnal
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <form action="" method="POST" enctype="multipart/form-data">
+                                {% csrf_token %}
+                                <div class="mb-3">
+                                    <label class="form-label">Judul</label>
+                                    <input type="text" class="form-control form-control" name="title" value="{{data.title}}"/>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Deskripsi</label>
+                                    <textarea class="form-control" name="deskripsi" cols="30" rows="10">{{data.deskripsi}}</textarea>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Draft</label>
+                                    <input type="file" class="form-control" name="file" />
+                                    <small>Draft terupload: {{data.file}}</small>
+                                </div>
+                                <button class="btn btn-primary btn-sm">Simpan</button>
+                            </form>
+                            
+                            {% for msg in messages %} 
+                                {% if msg.tags == 'success' %}
+                                <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+                                <script>
+                                Swal.fire({
+                                    title: "Success",
+                                    text: "{{msg}}",
+                                    icon: "success",
+                                    showConfirmButton: false,
+                                    timer: 1500,
+                                });
+                                </script>
+                                {% endif %} 
+                                {% if msg.tags == 'error' %}
+                                <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+                                <script>
+                                    Swal.fire({
+                                    title: "Error",
+                                    html: "{{msg}}",
+                                    icon: "error",
+                                    });
+                                </script>
+                                {% endif %} 
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
