@@ -22,6 +22,8 @@
                                 <th scope="col">Judul</th>
                                 {% comment %} <th scope="col">Status</th> {% endcomment %}
                                 <th scope="col">Draft</th>
+                                <th scope="col">Status</th>
+                                <th scope="col">Komentar</th>
                                 <th scope="col">Aksi</th>
                             </tr>
                         </thead>
@@ -33,7 +35,15 @@
                                     <td>{{item.pembimbing.nama}}</td>
                                     <td>{{item.judul}}</td>
                                     {% comment %} <td>{{item.status}}</td> {% endcomment %}
-                                    <td>{{item.file}}</td>
+                                    <td>
+                                        <a href="/media/{{item.file}}" target="_blank">{{item.file}}</a>
+                                    </td>
+                                    <td>{{item.status}}</td>
+                                    <td>
+                                        <div style="width: 150px;white-space: nowrap;overflow: hidden;text-overflow: ellipsis;">
+                                            {{item.komentar}}
+                                        </div>
+                                    </td>
                                     <td>
                                         <div class="btn-group" role="group" aria-label="Basic example">
                                             <a href={% url 'tugas-akhir-edit' id=item.id %}  class="btn btn-info text-white btn-sm">Edit</a>

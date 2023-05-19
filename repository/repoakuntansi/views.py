@@ -476,7 +476,7 @@ def tugasAkhirCreate(request):
             user = get_object_or_404(User, username=request.user)
             post = request.POST.copy()
             post['user'] = user.id
-            post['status'] = 'Menunggu Konfirmasi'
+            post['status'] = 'Menunggu'
             form = TugasAkhirForm(post or None, request.FILES)
             if form.is_valid():
                 form.save()
@@ -506,7 +506,7 @@ def tugasAkhirEdit(request, id):
             tugasAkhir = TugasAkhir.objects.get(id=id)
             post = request.POST.copy()
             post['user'] = tugasAkhir.user_id
-            post['status'] = tugasAkhir.status
+            # post['status'] = tugasAkhir.status
             form = TugasAkhirForm(post,
                                   request.FILES, instance=tugasAkhir)
             if form.is_valid():
