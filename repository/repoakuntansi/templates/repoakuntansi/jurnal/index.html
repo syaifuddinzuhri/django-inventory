@@ -1,5 +1,5 @@
 {% extends 'repoakuntansi/index.html' %} 
-
+{% load replace_string %}
 {% block title %} 
     Jurnal
 {% endblock %}
@@ -20,8 +20,11 @@
                         <thead>
                             <tr>
                                 <th scope="col">#</th>
+                                {% if user.tipe != 'USER'%}
                                 <th scope="col">Nama Mahasiswa</th>
+                                {% endif %}
                                 <th scope="col">Judul</th>
+                                <th scope="col">Penulis</th>
                                 {% comment %} <th scope="col">Status</th> {% endcomment %}
                                 <th scope="col">Draft</th>
                                 <th scope="col">Aksi</th>
@@ -31,8 +34,11 @@
                             {% for item in data %}
                                 <tr>
                                     <td>{{ forloop.counter }}</td>
+                                    {% if user.tipe != 'USER'%}
                                     <td>{{item.user.nama}}</td>
+                                    {% endif %}
                                     <td>{{item.title}}</td>
+                                    <td>{{ item.penulis|replace_string }}</td>
                                     {% comment %} <td>{{item.status}}</td> {% endcomment %}
                                     <td>{{item.file}}</td>
                                     <td>

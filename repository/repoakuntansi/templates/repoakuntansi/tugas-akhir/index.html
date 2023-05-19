@@ -13,11 +13,14 @@
                     List Tugas Akhir
                 </div>
                 <div class="card-body">
+                    <div class="table-responsive">
                     <table class="table">
                         <thead>
                             <tr>
                                 <th scope="col">#</th>
+                                {% if user.tipe != 'USER'%}
                                 <th scope="col">Nama Mahasiswa</th>
+                                {% endif %}
                                 <th scope="col">Dosen Pembimbing</th>
                                 <th scope="col">Judul</th>
                                 {% comment %} <th scope="col">Status</th> {% endcomment %}
@@ -31,7 +34,9 @@
                             {% for item in data %}
                                 <tr>
                                     <td>{{ forloop.counter }}</td>
+                                    {% if user.tipe != 'USER'%}
                                     <td>{{item.user.nama}}</td>
+                                    {% endif %}
                                     <td>{{item.pembimbing.nama}}</td>
                                     <td>{{item.judul}}</td>
                                     {% comment %} <td>{{item.status}}</td> {% endcomment %}
@@ -55,6 +60,7 @@
                                 
                         </tbody>
                     </table>
+                    </div>
                 </div>
             </div>
         </div>

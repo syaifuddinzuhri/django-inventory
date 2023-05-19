@@ -87,6 +87,7 @@ class Jurnal(models.Model):
 
     user = models.ForeignKey("User", on_delete=models.CASCADE)
     title = models.CharField(max_length=255)
+    penulis = models.TextField(null=True, blank=True)
     deskripsi = models.TextField(null=True)
     status = models.CharField(max_length=100)
     file = models.FileField(

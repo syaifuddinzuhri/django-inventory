@@ -82,6 +82,7 @@ def submitLogin(request):
             if user is None:
                 messages.error(request, 'Username atau password salah')
             else:
+                request.session.set_expiry(3600)
                 login(request, user)
                 messages.success(request, 'Login Berhasil')
             return redirect('dashboard')
@@ -462,9 +463,14 @@ def superAdminDelete(request, id):
 
 @login_required(login_url='/login')
 def tugasAkhirList(request):
-    tugas = TugasAkhir.objects.all()
     context = {}
     context["user"] = get_object_or_404(User, username=request.user)
+    if context["user"].tipe == "SUPER_ADMIN" or context["user"].tipe == "ADMIN":
+        tugas = TugasAkhir.objects.all()
+    elif context["user"].tipe == "PEMBIMBING":
+        tugas = TugasAkhir.objects.filter(pembimbing_id=context["user"].id)
+    else:
+        tugas = TugasAkhir.objects.filter(user_id=context["user"].id)
     context["data"] = tugas
     return render(request, 'repoakuntansi/tugas-akhir/index.html', context)
 
@@ -549,9 +555,12 @@ def tugasAkhirDelete(request, id):
 
 @login_required(login_url='/login')
 def jurnalList(request):
-    tugas = Jurnal.objects.all()
     context = {}
     context["user"] = get_object_or_404(User, username=request.user)
+    if context["user"].tipe == "SUPER_ADMIN" or context["user"].tipe == "ADMIN":
+        tugas = Jurnal.objects.all()
+    else:
+        tugas = Jurnal.objects.filter(user_id=context["user"].id)
     context["data"] = tugas
     return render(request, 'repoakuntansi/jurnal/index.html', context)
 
@@ -563,6 +572,7 @@ def jurnalCreate(request):
             user = get_object_or_404(User, username=request.user)
             post = request.POST.copy()
             post['user'] = user.id
+            post['penulis'] = post['penulis'].replace("\n",",")
             post['status'] = 'Menunggu Konfirmasi'
             form = JurnalForm(post or None, request.FILES)
             if form.is_valid():
