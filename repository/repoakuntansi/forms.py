@@ -30,7 +30,16 @@ class JurnalForm(ModelForm):
 class TugasAkhirForm(ModelForm):
     class Meta:
         model = TugasAkhir
-        fields = "__all__"
+        fields = [
+            'catatan',
+            'deskripsi',
+            'pembimbing',
+            'user',
+            'judul',
+            'file',
+            'status',
+            'komentar'
+        ]
 
 
 class JurnalForm(ModelForm):

@@ -33,7 +33,7 @@
                                     <label class="form-label">Pembimbing</label>
                                     <select name="pembimbing" class="default-select form-control form-control wide">
                                         <option value="" selected disabled>-- Pilih Pembimbing --</option>
-                                        {% for item in data %}
+                                        {% for item in pembimbing %}
                                             <option value="{{item.id}}">{{item.nama}}</option>
                                         {% endfor %}
                                     </select>

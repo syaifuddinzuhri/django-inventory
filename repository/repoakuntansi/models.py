@@ -111,7 +111,7 @@ class TugasAkhir(models.Model):
     judul = models.CharField(max_length=255, null=True)
     deskripsi = models.TextField(null=True)
     catatan = models.TextField(null=True)
-    komentar = models.TextField(null=True)
+    komentar = models.TextField(null=True, blank=True)
     status = models.CharField(max_length=100, null=True)
     file = models.FileField(upload_to='file/',
                             validators=[upload_pdf_validator], null=True)

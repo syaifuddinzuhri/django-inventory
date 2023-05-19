@@ -477,6 +477,7 @@ def tugasAkhirCreate(request):
             post = request.POST.copy()
             post['user'] = user.id
             post['status'] = 'Menunggu'
+            post['komentar'] = None
             form = TugasAkhirForm(post or None, request.FILES)
             if form.is_valid():
                 form.save()
@@ -495,7 +496,7 @@ def tugasAkhirCreate(request):
     pembimbing = User.objects.filter(tipe='PEMBIMBING').values()
     context = {}
     context["user"] = get_object_or_404(User, username=request.user)
-    context["data"] = pembimbing
+    context["pembimbing"] = pembimbing
     return render(request, 'repoakuntansi/tugas-akhir/create.html', context)
 
 
